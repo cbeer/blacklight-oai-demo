@@ -3,30 +3,16 @@
 <table>
   <tr>
     <th>Title</th>
-    <th>Description</th>
-    <th>Url</th>
-    <th>Endpoint</th>
-    <th>Metadata Prefix</th>
-    <th>Set</th>
-    <th>Last Consumed At</th>
-    <th>Interval</th>
-    <th>Stylesheet</th>
+    <th>Endpoint (Set / Metadata Prefix)</th>
+    <th>Last Consumed At / Interval</th>
   </tr>
 
 <% @providers.each do |provider| %>
   <tr>
-    <td><%=h provider.title %></td>
-    <td><%=h provider.description %></td>
-    <td><%=h provider.url %></td>
-    <td><%=h provider.endpoint %></td>
-    <td><%=h provider.metadata_prefix %></td>
-    <td><%=h provider.set %></td>
-    <td><%=h provider.last_consumed_at %></td>
-    <td><%=h provider.interval %></td>
-    <td><%=h provider.stylesheet %></td>
+    <td><%= link_to provider.title, provider_url(provider) %></td>
+    <td><%=h provider.endpoint %> ( <%=h provider.set %> / <%=h provider.metadata_prefix %>)</td>
+    <td><%= time_ago_in_words provider.last_consumed_at %> ago / every <%=h time_ago_in_words provider.interval.seconds.from_now  %></td>
     <td><%= link_to 'Show', provider %></td>
-    <td><%= link_to 'Edit', edit_provider_path(provider) %></td>
-    <td><%= link_to 'Destroy', provider, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>

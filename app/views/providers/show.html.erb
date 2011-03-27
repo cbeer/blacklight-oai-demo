@@ -10,12 +10,12 @@
 
 <p>
   <b>Url:</b>
-  <%=h @provider.url %>
+  <%= link_to @provider.url, @provider.url %>
 </p>
 
 <p>
   <b>Endpoint:</b>
-  <%=h @provider.endpoint %>
+  <%= link_to @provider.endpoint, "#{@provider.endpoint}#{("?verb=Identify" if @provider.endpoint) || "" }" %>
 </p>
 
 <p>
@@ -30,12 +30,12 @@
 
 <p>
   <b>Last Consumed At:</b>
-  <%=h @provider.last_consumed_at %>
+  <%= time_ago_in_words @provider.last_consumed_at %> ago (<%=h @provider.last_consumed_at %>)
 </p>
 
 <p>
   <b>Interval:</b>
-  <%=h @provider.interval %>
+  every <%=h time_ago_in_words @provider.interval.seconds.from_now  %> (<%=h @provider.interval %> seconds)
 </p>
 
 <p>
@@ -47,6 +47,9 @@
   <%=h @provider.stylesheet %>
 </p>
 
+<% form_for @provider, :url => harvest_provider_path(@provider), :html => { :method => :post } do |f| %>
+  <%= f.submit "Harvest" %>
+<% end %>
 
 <%= link_to 'Edit', edit_provider_path(@provider) %> |
 <%= link_to 'Back', providers_path %>
