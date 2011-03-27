@@ -41,6 +41,9 @@ module NavigationHelpers
       when /the facet page for "([^\"]*)"/
         catalog_facet_path($1)
 
+      when /the providers page/
+        providers_path
+
       # Add more page name => path mappings here
 
       else
