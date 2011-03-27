@@ -1,0 +1,3 @@
+module OaiHarvester::SolrHelper
+
+end
