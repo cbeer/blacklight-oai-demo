@@ -1,4 +1,7 @@
 class Provider < ActiveRecord::Base
+  extend ActiveSupport::Memoizable
+  before_save :load_set_metadata
+
   def consume!
     provider_config = oai_client.identify
 
@@ -23,10 +26,50 @@ class Provider < ActiveRecord::Base
     count
   end
 
+  def identify
+    oai_client.identify rescue nil
+  end
+  memoize :identify
+
+  def sets
+    oai_client.list_sets.to_a rescue []
+  end
+  memoize :sets
+
+  def set_metadata spec = nil
+    return nil unless spec
+    self.sets.select { |x| x.spec == spec }.first rescue nil
+  end
+  memoize :set_metadata
+
+  def metadata_formats
+    oai_client.list_metadata_formats.to_a rescue []
+  end
+  memoize :metadata_formats
 
   private
   def oai_client
-    @oai_client ||= OAI::Client.new(self.endpoint, :parser => 'libxml')
+    OAI::Client.new(self.endpoint, :parser => 'libxml') rescue nil
+  end
+  memoize :oai_client
+
+  def load_set_metadata
+    return if self.endpoint.blank? or self.set.blank?
+
+    metadata = self.set_metadata(self.set)
+
+    doc = Nokogiri::XML(metadata.description.to_s)
+
+    if self.title.blank?
+      title = doc.xpath('//dc:title/text()', 'dc' => "http://purl.org/dc/elements/1.1/").first.to_s rescue nil
+      title ||= metadata.name if metadata.name
+      self.title = title
+    end
+
+    if self.description.blank?
+      description = doc.xpath('//dc:description/text()', 'dc' => "http://purl.org/dc/elements/1.1/").first.to_s rescue nil
+      self.description = description 
+    end
   end
 
   def convert_record_to_solrdoc(record)
@@ -56,6 +99,8 @@ class Provider < ActiveRecord::Base
   end
 
   def xslt
-    @xslt ||=  Nokogiri::XSLT(open(self.stylesheet))
+    Nokogiri::XSLT(open(self.stylesheet))
   end
+  memoize :xslt
+
 end
