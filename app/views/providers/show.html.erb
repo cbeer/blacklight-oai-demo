@@ -33,6 +33,10 @@
   <b>Last Consumed At:</b>
   <%= time_ago_in_words @provider.last_consumed_at %> ago (<%=h @provider.last_consumed_at %>)
 </p>
+<% else %>
+  <p>
+    <b>Never Consumed</b>
+  </p>
 <% end %>
 
 <% if @provider.interval %>
@@ -40,6 +44,10 @@
   <b>Interval:</b>
   every <%=h time_ago_in_words @provider.interval.seconds.from_now  %> (<%=h @provider.interval %> seconds)
 </p>
+<% else %>
+  <p>
+    <b>No Interval Set</b>
+  </p>
 <% end %>
 
 <p>

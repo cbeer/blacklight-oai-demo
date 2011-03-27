@@ -11,7 +11,7 @@
   <tr>
     <td><%= link_to provider.title, provider_url(provider) %></td>
     <td><%=h provider.endpoint %> ( <%=h provider.set %> / <%=h provider.metadata_prefix %>)</td>
-    <td><%= "#{time_ago_in_words provider.last_consumed_at} ago / every #{time_ago_in_words provider.interval.seconds.from_now}" rescue ""%></td>
+    <td><%= "#{time_ago_in_words(provider.last_consumed_at)} ago}" rescue "Never" %> / <%= "every #{time_ago_in_words provider.interval.seconds.from_now}" rescue "No Interval" %></td>
     <td><%= link_to 'Show', provider %></td>
   </tr>
 <% end %>
