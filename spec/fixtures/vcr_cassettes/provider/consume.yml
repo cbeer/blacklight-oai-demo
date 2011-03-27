@@ -12466,3 +12466,65 @@
         </OAI-PMH> 
 
     http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :get
+    uri: http://international.loc.gov:80/cgi-bin/oai2_0?from=2011-03-27T19:09:40Z&metadataPrefix=oai_dc&set=wright&verb=ListRecords
+    body: 
+    headers: 
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: Success
+    headers: 
+      content-type: 
+      - text/xml; charset=UTF-8
+      date: 
+      - Sun, 27 Mar 2011 19:09:40 GMT
+      server: 
+      - Apache
+      transfer-encoding: 
+      - chunked
+    body: |
+      <?xml version="1.0" encoding="UTF-8"?>
+        <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" 
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                 xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ 
+                                     http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+        <responseDate>2011-03-27T19:09:40Z</responseDate>
+      <request verb="ListRecords" from="2011-03-27T19:09:40Z" metadataPrefix="oai_dc" set="wright">http://memory.loc.gov/cgi-bin/oai2_0</request>
+         <error code="noRecordsMatch">No records match the request criteria.</error>
+        </OAI-PMH> 
+
+    http_version: "1.1"
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :get
+    uri: http://international.loc.gov:80/cgi-bin/oai2_0?from=2011-03-27T19:09:56Z&metadataPrefix=oai_dc&set=wright&verb=ListRecords
+    body: 
+    headers: 
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: Success
+    headers: 
+      content-type: 
+      - text/xml; charset=UTF-8
+      server: 
+      - Apache
+      date: 
+      - Sun, 27 Mar 2011 19:09:57 GMT
+      transfer-encoding: 
+      - chunked
+    body: |
+      <?xml version="1.0" encoding="UTF-8"?>
+        <OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/" 
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                 xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ 
+                                     http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+        <responseDate>2011-03-27T19:09:57Z</responseDate>
+      <request verb="ListRecords" from="2011-03-27T19:09:56Z" metadataPrefix="oai_dc" set="wright">http://memory.loc.gov/cgi-bin/oai2_0</request>
+         <error code="noRecordsMatch">No records match the request criteria.</error>
+        </OAI-PMH> 
+
+    http_version: "1.1"

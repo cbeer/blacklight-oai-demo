@@ -35,7 +35,7 @@ Rails::Initializer.run do |config|
   config.gem 'rspec', :version=>'~>1.3.0', :lib=>false
   config.gem 'rspec-rails', :version=>'~>1.3.2', :lib=>false
   config.gem "vcr"
-  config.gem "webmock"
+  config.gem "webmock", :lib => false
   
   config.gem 'webrat', :version=>'0.7.0'
   config.gem 'cucumber', :version=>'~>0.6.2'
