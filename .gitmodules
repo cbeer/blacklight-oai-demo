@@ -1,3 +1,6 @@
 [submodule "vendor/plugins/blacklight"]
 	path = vendor/plugins/blacklight
 	url = git://github.com/projectblacklight/blacklight.git
+[submodule "vendor/plugins/blacklight_range_limit"]
+	path = vendor/plugins/blacklight_range_limit
+	url = git://github.com/projectblacklight/blacklight_range_limit.git

@@ -72,6 +72,7 @@ Blacklight.configure(:shared) do |config|
       "format",
       "dc_subject_facet",
       "dc_type_facet",
+      "dc_date_year_i",
       "dc_coverage_facet",
       "dc_creator_facet",
       "dc_contributor_facet",
@@ -81,6 +82,7 @@ Blacklight.configure(:shared) do |config|
       "format"              => "Format",
       "dc_subject_facet" => "Subject",
       "dc_type_facet" => "Type",
+      "dc_date_year_i" => "Year",
       "dc_coverage_facet" => "Coverage",
       "dc_creator_facet" => "Creator",
       "dc_contributor_facet" => "Contributor",
@@ -100,6 +102,9 @@ Blacklight.configure(:shared) do |config|
     # sniffing requires solr requests to be made with "echoParams=all", for
     # app code to actually have it echo'd back to see it.     
     :limits => {
+    },
+    :range => {
+      "dc_date_year_i" => true
     }
   }
 
