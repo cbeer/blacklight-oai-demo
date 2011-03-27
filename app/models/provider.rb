@@ -87,7 +87,7 @@ class Provider < ActiveRecord::Base
 
   def delete_records_from_solr
     Blacklight.solr.delete_by_query "provider_id_i:#{self.id}"
-    Blacklight.commit
+    Blacklight.solr.commit
   end
 
   def convert_record_to_solrdoc(record)
