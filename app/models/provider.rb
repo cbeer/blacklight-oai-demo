@@ -71,6 +71,8 @@ class Provider < ActiveRecord::Base
 
     metadata = self.set_metadata(self.set)
 
+    return if metadata.nil?
+
     doc = Nokogiri::XML(metadata.description.to_s)
 
     if self.title.blank?
