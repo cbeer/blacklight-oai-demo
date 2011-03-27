@@ -42,4 +42,22 @@ describe Provider do
     hash['provider_id_i'].should == @provider.id
     hash['harvested_record_t'].should == record
   end
+
+  context "consume" do
+    use_vcr_cassette "provider/consume", :record => :new_episodes
+    it "should fail if no stylesheet is defined" do
+      @provider.attributes = { :endpoint => 'http://international.loc.gov/cgi-bin/oai2_0' }
+      @provider.consume!.should == 0
+    end
+
+    it "should index LoC Wright collection" do
+      @provider.attributes = { :endpoint => 'http://international.loc.gov/cgi-bin/oai2_0', :set => 'wright', :stylesheet => 'public/xslt/oai_dc.xsl' }
+      @provider.consume!.should == 303
+    end
+
+    it "should fail if no records available" do
+      @provider.attributes = { :endpoint => 'http://international.loc.gov/cgi-bin/oai2_0', :set => 'wright', :stylesheet => 'public/xslt/oai_dc.xsl', :last_consumed_at => Time.now }
+      @provider.consume!.should == 0
+    end
+  end
 end
