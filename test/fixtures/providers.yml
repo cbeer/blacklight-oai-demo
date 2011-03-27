@@ -1,0 +1,10 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title: Records for collection of glass negatives from the Papers of Wilbur and Orville Wright, digitized by the Library of Congress
+  description: Orville and Wilbur Wright, pioneers in early aviation, used photography to document their experiments with flight and to record family events. Subjects depicted include portraits of the Wright brothers and their family members; friends and associates; views of the Wright family home at 7 Hawthorn St., Dayton, Ohio; Orville Wright's home "Hawthorne Hill", Dayton; family gatherings; the brothers performing gliding experiments and powered flight tests at Kitty Hawk, N.C., and at Huffman Prairie, Dayton, Ohio, (including views of the first flight at Kitty Hawk, Dec. 17, 1903). Also includes images of the Wright camp at Kitty Hawk; airplane motors; a few views of the Wright Company plant; portraits of Orville Wright's dog Scipio; some landscape views of areas around Dayton, Ohio and Kitty Hawk, N.C. Also Charles Lindbergh at Wilbur Wright Field, 1927; photographs of documents relating to a legal case against Bishop Milton Wright.
+  url: http://loc.gov
+  endpoint: http://international.loc.gov/cgi-bin/oai2_0
+  metadata_prefix: oai_dc
+  set: 'wright'
+  stylesheet: 'public/xslt/oai_dc.xsl'

@@ -1,0 +1,38 @@
+<p>
+  <b>Title:</b>
+  <%=h @provider.title %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @provider.description %>
+</p>
+
+<p>
+  <b>Url:</b>
+  <%=h @provider.url %>
+</p>
+
+<p>
+  <b>Endpoint:</b>
+  <%=h @provider.endpoint %>
+</p>
+
+<p>
+  <b>Metadata Prefix:</b>
+  <%=h @provider.metadata_prefix %>
+</p>
+
+<p>
+  <b>Set:</b>
+  <%=h @provider.set %>
+</p>
+
+<p>
+  <b>Stylesheet:</b>
+  <%=h @provider.stylesheet %>
+</p>
+
+
+<%= link_to 'Edit', edit_provider_path(@provider) %> |
+<%= link_to 'Back', providers_path %>
