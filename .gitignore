@@ -3,3 +3,6 @@ db/schema.rb
 jetty/solr/*/data
 log/*.log
 public/plugin_assets
+rerun.txt
+coverage.data
+coverage
