@@ -7,4 +7,6 @@ one:
   endpoint: http://international.loc.gov/cgi-bin/oai2_0
   metadata_prefix: oai_dc
   set: 'wright'
+  last_consumed_at: 1970-01-01
+  interval: 604800
   stylesheet: 'public/xslt/oai_dc.xsl'

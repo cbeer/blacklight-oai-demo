@@ -15,7 +15,6 @@
     </xsl:template>
 
     <xsl:template match="identifier">
-        <field name="id"><xsl:value-of select="translate(translate(., './', '--'), translate(., 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_', ''), '-')" /></field>
         <field name="identifier_s"><xsl:value-of select="." /></field>
     </xsl:template>
 
