@@ -7,7 +7,13 @@ class Provider < ActiveRecord::Base
 
     response = nil
     count = 0
-    options = { :set => self.set, :metadata_prefix => self.metadata_prefix, :from => self.last_consumed_at.clone.utc.xmlschema }
+
+    return 0 unless self.stylesheet
+
+    from = self.last_consumed_at
+    from ||= Time.at(0)
+
+    options = { :set => self.set, :metadata_prefix => self.metadata_prefix, :from => from.clone.utc.xmlschema }
 
     self.last_consumed_at = Time.now
     begin
@@ -15,8 +21,7 @@ class Provider < ActiveRecord::Base
         options[:resumption_token] = response.resumption_token if response and response.resumption_token and not response.resumption_token.empty? 
         response = oai_client.list_records(options)
         response.doc.find("/OAI-PMH/ListRecords/record").to_a.each_slice(50) do |records|
-          Blacklight.solr.add records.reject(:deleted?).map { |rec| convert_record_to_solrdoc(rec) }
-          records.select(&:deleted?).each { |record| h = convert_record_to_solrdoc(rec); Blacklight.solr.delete(rec['id']) }
+          Blacklight.solr.add records.map { |rec| convert_record_to_solrdoc(rec) }
           count += records.length
         end
       end while response.resumption_token and not response.resumption_token.empty?
@@ -90,7 +95,10 @@ class Provider < ActiveRecord::Base
     end
 
     solrdoc['id'] = (solrdoc['identifier_s'] || solrdoc['id']).first.parameterize
-    solrdoc['format'] = solrdoc['format'].first.parameterize('_') if solrdoc['format']
+    solrdoc['format'] &&= solrdoc['format'].first.parameterize('_') 
+
+    solrdoc['deleted_b'] &&= solrdoc['deleted_b'].first
+    solrdoc['deleted_b'] ||= false
 
     solrdoc['dc_subject_hier_facet'] = solrdoc['dc_subject_t'].map { |str| val = []; tokens = str.split('--'); i = 0; val << tokens.take(i+=1) until i == tokens.length; val.map { |x| x.join('--') }  }.flatten.compact.uniq if solrdoc['dc_subject_t']
     solrdoc['dc_date_year_i'] = solrdoc['dc_date_t'].map { |x| x.scan(/\d{4}/).first }.flatten.compact.uniq if solrdoc['dc_date_t']
