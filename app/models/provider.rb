@@ -1,6 +1,7 @@
 class Provider < ActiveRecord::Base
   extend ActiveSupport::Memoizable
   before_save :load_set_metadata
+  after_destroy :delete_records_from_solr
 
   def consume!
     provider_config = oai_client.identify
@@ -82,6 +83,11 @@ class Provider < ActiveRecord::Base
       description = doc.xpath('//dc:description/text()', 'dc' => "http://purl.org/dc/elements/1.1/").first.to_s rescue nil
       self.description = description 
     end
+  end
+
+  def delete_records_from_solr
+    Blacklight.solr.delete_by_query "provider_id_i:#{self.id}"
+    Blacklight.commit
   end
 
   def convert_record_to_solrdoc(record)
