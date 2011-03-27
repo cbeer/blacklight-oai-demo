@@ -11,13 +11,20 @@ class Provider < ActiveRecord::Base
 
     self.last_consumed_at = Time.now
     begin
-      options[:resumption_token] = response.resumption_token if response and response.resumption_token and not response.resumption_token.empty? 
-      response = oai_client.list_records(options)
-      response.doc.find("/OAI-PMH/ListRecords/record").to_a.each_slice(50) do |records|
-        Blacklight.solr.add records.map { |rec| convert_record_to_solrdoc(rec) }
-        count += records.length
-      end
-    end while response.resumption_token and not response.resumption_token.empty?
+      begin
+        options[:resumption_token] = response.resumption_token if response and response.resumption_token and not response.resumption_token.empty? 
+        response = oai_client.list_records(options)
+        response.doc.find("/OAI-PMH/ListRecords/record").to_a.each_slice(50) do |records|
+          Blacklight.solr.add records.reject(:deleted?).map { |rec| convert_record_to_solrdoc(rec) }
+          records.select(&:deleted?).each { |record| h = convert_record_to_solrdoc(rec); Blacklight.solr.delete(rec['id']) }
+          count += records.length
+        end
+      end while response.resumption_token and not response.resumption_token.empty?
+    rescue 
+      raise $! unless $!.respond_to?(:code)
+      raise $! unless $!.code ==  "noRecordsMatch"
+      return 0
+    end
 
     Blacklight.solr.commit
 
