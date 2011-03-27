@@ -34,8 +34,8 @@ Blacklight.configure(:shared) do |config|
   # Recommendation: Use field names from Dublin Core
   SolrDocument.field_semantics.merge!(    
     :title => "title_display",
-    :author => "author_display",
-    :language => "language_facet"  
+    :author => "dc_creator_t",
+    :language => "dc_language_t"
   )
         
   
@@ -70,21 +70,21 @@ Blacklight.configure(:shared) do |config|
   config[:facet] = {
     :field_names => (facet_fields = [
       "format",
-      "pub_date",
-      "subject_topic_facet",
-      "language_facet",
-      "lc_1letter_facet",
-      "subject_geo_facet",
-      "subject_era_facet"
+      "dc_subject_facet",
+      "dc_type_facet",
+      "dc_coverage_facet",
+      "dc_creator_facet",
+      "dc_contributor_facet",
+      "dc_publisher_facet"
     ]),
     :labels => {
       "format"              => "Format",
-      "pub_date"            => "Publication Year",
-      "subject_topic_facet" => "Topic",
-      "language_facet"      => "Language",
-      "lc_1letter_facet"    => "Call Number",
-      "subject_era_facet"   => "Era",
-      "subject_geo_facet"   => "Region"
+      "dc_subject_facet" => "Subject",
+      "dc_type_facet" => "Type",
+      "dc_coverage_facet" => "Coverage",
+      "dc_creator_facet" => "Creator",
+      "dc_contributor_facet" => "Contributor",
+      "dc_publisher_Facet" => "Publisher"
     },
     # Setting a limit will trigger Blacklight's 'more' facet values link.
     # * If left unset, then all facet values returned by solr will be displayed.
@@ -100,8 +100,6 @@ Blacklight.configure(:shared) do |config|
     # sniffing requires solr requests to be made with "echoParams=all", for
     # app code to actually have it echo'd back to see it.     
     :limits => {
-      "subject_topic_facet" => 20,
-      "language_facet" => true
     }
   }
 
@@ -115,26 +113,18 @@ Blacklight.configure(:shared) do |config|
   #   The ordering of the field names is the order of the display 
   config[:index_fields] = {
     :field_names => [
-      "title_display",
-      "title_vern_display",
-      "author_display",
-      "author_vern_display",
-      "format",
-      "language_facet",
-      "published_display",
-      "published_vern_display",
-      "lc_callnum_display"
+      'dc_title_t',
+      'dc_description_t',
+      'dc_creator_t',
+      'dc_date_t',
+      'dc_type_t'
     ],
     :labels => {
-      "title_display"           => "Title:",
-      "title_vern_display"      => "Title:",
-      "author_display"          => "Author:",
-      "author_vern_display"     => "Author:",
-      "format"                  => "Format:",
-      "language_facet"          => "Language:",
-      "published_display"       => "Published:",
-      "published_vern_display"  => "Published:",
-      "lc_callnum_display"      => "Call number:"
+      'dc_title_t' => 'Title:',
+      'dc_description_t' => 'Description:',
+      'dc_creator_t' => 'Creator:',
+      'dc_date_t' => 'Date:',
+      'dc_type_t' => 'Type:'
     }
   }
 
@@ -142,38 +132,18 @@ Blacklight.configure(:shared) do |config|
   #   The ordering of the field names is the order of the display 
   config[:show_fields] = {
     :field_names => [
-      "title_display",
-      "title_vern_display",
-      "subtitle_display",
-      "subtitle_vern_display",
-      "author_display",
-      "author_vern_display",
-      "format",
-      "url_fulltext_display",
-      "url_suppl_display",
-      "material_type_display",
-      "language_facet",
-      "published_display",
-      "published_vern_display",
-      "lc_callnum_display",
-      "isbn_t"
+      'dc_title_t',
+      'dc_description_t',
+      'dc_creator_t',
+      'dc_date_t',
+      'dc_type_t'
     ],
     :labels => {
-      "title_display"           => "Title:",
-      "title_vern_display"      => "Title:",
-      "subtitle_display"        => "Subtitle:",
-      "subtitle_vern_display"   => "Subtitle:",
-      "author_display"          => "Author:",
-      "author_vern_display"     => "Author:",
-      "format"                  => "Format:",
-      "url_fulltext_display"    => "URL:",
-      "url_suppl_display"       => "More Information:",
-      "material_type_display"   => "Physical description:",
-      "language_facet"          => "Language:",
-      "published_display"       => "Published:",
-      "published_vern_display"  => "Published:",
-      "lc_callnum_display"      => "Call number:",
-      "isbn_t"                  => "ISBN:"
+      'dc_title_t' => 'Title:',
+      'dc_description_t' => 'Description:',
+      'dc_creator_t' => 'Creator:',
+      'dc_date_t' => 'Date:',
+      'dc_type_t' => 'Type:'
     }
   }
 
@@ -252,9 +222,6 @@ Blacklight.configure(:shared) do |config|
   # label is key, solr field is value
   config[:sort_fields] ||= []
   config[:sort_fields] << ['relevance', 'score desc, pub_date_sort desc, title_sort asc']
-  config[:sort_fields] << ['year', 'pub_date_sort desc, title_sort asc']
-  config[:sort_fields] << ['author', 'author_sort asc, title_sort asc']
-  config[:sort_fields] << ['title', 'title_sort asc, pub_date_sort desc']
   
   # If there are more than this many search results, no spelling ("did you 
   # mean") suggestion is offered.
