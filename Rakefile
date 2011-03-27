@@ -8,3 +8,14 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 require 'tasks/rails'
+
+# the default rake task
+desc "run migrations and call solr:spec and solr:features"
+task :default => "test"
+
+# run migrations and call solr:spec and solr:features
+desc 'run migrations and call solr:spec and solr:features'
+task "test" => ["db:migrate", "spec", "cucumber"] do
+  # ...
+end
+
