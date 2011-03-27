@@ -1,5 +1,6 @@
 class Provider < ActiveRecord::Base
   extend ActiveSupport::Memoizable
+  validates_format_of :endpoint, :with => URI::regexp(%w(http https))
   before_save :load_set_metadata
   after_destroy :delete_records_from_solr
 
