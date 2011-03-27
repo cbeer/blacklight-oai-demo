@@ -1,4 +1,4 @@
 db/*.sqlite3
 db/schema.rb
-jetty/*
+jetty/solr/*/data
 log/*.log
