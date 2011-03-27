@@ -80,4 +80,21 @@ class ProvidersController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  # POST /providers/1/harvest
+  # POST /providers/1/harvest.xml
+  def harvest
+    @provider = Provider.find(params[:id])
+    count = @provider.consume!
+
+    respond_to do |format|
+      format.html { redirect_to(records_provider_url(@provider)) }
+      format.xml  { render :xml => { :count => count } }
+    end
+  end
+
+  def records
+    @provider = Provider.find(params[:id])
+    redirect_to(catalog_index_url(:q => "provider_id_i:#{@provider.id}")) and return
+  end
 end
