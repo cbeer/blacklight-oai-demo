@@ -21,11 +21,11 @@
   </p>
   <p>
     <%= f.label :metadata_prefix %><br />
-    <%= f.text_field :metadata_prefix %>
+    <%= f.select :metadata_prefix, @provider.metadata_formats.map { |x| [x.namespace, x.prefix ] } rescue f.text_field :metadata_prefix %>
   </p>
   <p>
     <%= f.label :set %><br />
-    <%= f.text_field :set %>
+    <%= f.select :set, @provider.sets.map { |x| [x.name, x.spec] } rescue f.text_field :set%> 
   </p>
   <p>
     <%= f.label :last_consumed_at %><br />
