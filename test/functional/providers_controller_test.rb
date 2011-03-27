@@ -17,7 +17,7 @@ class ProvidersControllerTest < ActionController::TestCase
       post :create, :provider => { }
     end
 
-    assert_redirected_to provider_path(assigns(:provider))
+    assert_redirected_to edit_provider_path(assigns(:provider))
   end
 
   test "should show provider" do
