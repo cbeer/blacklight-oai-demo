@@ -28,20 +28,20 @@
   <%=h @provider.set %>
 </p>
 
+<% if @provider.last_consumed_at %>
 <p>
   <b>Last Consumed At:</b>
   <%= time_ago_in_words @provider.last_consumed_at %> ago (<%=h @provider.last_consumed_at %>)
 </p>
+<% end %>
 
+<% if @provider.interval %>
 <p>
   <b>Interval:</b>
   every <%=h time_ago_in_words @provider.interval.seconds.from_now  %> (<%=h @provider.interval %> seconds)
 </p>
+<% end %>
 
-<p>
-  <b>Set:</b>
-  <%=h @provider.set %>
-</p>
 <p>
   <b>Stylesheet:</b>
   <%=h @provider.stylesheet %>
@@ -52,4 +52,5 @@
 <% end %>
 
 <%= link_to 'Edit', edit_provider_path(@provider) %> |
+<%= link_to 'Delete', @provider, :confirm => 'Are you sure?', :method => :delete %> |
 <%= link_to 'Back', providers_path %>
