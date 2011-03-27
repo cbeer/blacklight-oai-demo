@@ -1,16 +1,15 @@
 class Provider < ActiveRecord::Base
   def consume!
-    client = OAI::Client.new(endpoint, :parser => 'libxml')
-    provider_config = client.identify
+    provider_config = oai_client.identify
 
     response = nil
     count = 0
-    options = { :set => set, :metadata_prefix => metadata_prefix, :from => last_consumed_at.clone.utc.xmlschema }
+    options = { :set => self.set, :metadata_prefix => self.metadata_prefix, :from => self.last_consumed_at.clone.utc.xmlschema }
 
-    last_consumed_at = Time.now
+    self.last_consumed_at = Time.now
     begin
       options[:resumption_token] = response.resumption_token if response and response.resumption_token and not response.resumption_token.empty? 
-      response = client.list_records(options)
+      response = oai_client.list_records(options)
       response.doc.find("/OAI-PMH/ListRecords/record").to_a.each_slice(50) do |records|
         Blacklight.solr.add records.map { |rec| convert_record_to_solrdoc(rec) }
         count += records.length
@@ -19,10 +18,17 @@ class Provider < ActiveRecord::Base
 
     Blacklight.solr.commit
 
-    save
+    self.save
+
+    count
   end
 
+
   private
+  def oai_client
+    @oai_client ||= OAI::Client.new(self.endpoint, :parser => 'libxml')
+  end
+
   def convert_record_to_solrdoc(record)
     doc = Nokogiri::XML(record.to_s)
     solrdoc = xslt.transform(doc)
@@ -36,10 +42,13 @@ class Provider < ActiveRecord::Base
     solrdoc['id'] = (solrdoc['identifier_s'] || solrdoc['id']).first.parameterize
     solrdoc['format'] = solrdoc['format'].first.parameterize('_') if solrdoc['format']
 
-    solrdoc['provider_id_i'] = id
-    solrdoc['provider_harvested_dt'] = last_consumed_at.utc.xmlschema
-    solrdoc['provider_s'] = title
-    solrdoc['provider_endpoint_s'] = endpoint
+    solrdoc['dc_subject_hier_facet'] = solrdoc['dc_subject_t'].map { |str| val = []; tokens = str.split('--'); i = 0; val << tokens.take(i+=1) until i == tokens.length; val.map { |x| x.join('--') }  }.flatten.compact.uniq if solrdoc['dc_subject_t']
+    solrdoc['dc_date_year_i'] = solrdoc['dc_date_t'].map { |x| x.scan(/\d{4}/).first }.flatten.compact.uniq if solrdoc['dc_date_t']
+
+    solrdoc['provider_id_i'] = self.id
+    solrdoc['provider_harvested_dt'] = self.last_consumed_at.utc.xmlschema
+    solrdoc['provider_s'] = self.title
+    solrdoc['provider_endpoint_s'] = self.endpoint
 
     solrdoc['harvested_record_t'] = record.to_s
 
@@ -47,6 +56,6 @@ class Provider < ActiveRecord::Base
   end
 
   def xslt
-    @xslt ||=  Nokogiri::XSLT(open(stylesheet))
+    @xslt ||=  Nokogiri::XSLT(open(self.stylesheet))
   end
 end
